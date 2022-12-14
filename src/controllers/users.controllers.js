@@ -5,7 +5,7 @@ import connection from "../database/db.js";
 
 export async function usersList(req, res) {
   try {
-    const users = await connection.query(`SELECT * FROM users`);
+    const users = await connection.query(`SELECT id, name FROM users`);
     res.send(users.rows);
   } catch (error) {
     console.log(
