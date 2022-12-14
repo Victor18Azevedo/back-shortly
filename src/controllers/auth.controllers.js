@@ -50,8 +50,8 @@ export async function signIn(req, res) {
     }
 
     if (bcrypt.compareSync(password, user.password)) {
-      const generateToken = (id, user) =>
-        jwt.sign({ id, user }, process.env.SECRET_JWT, {
+      const generateToken = (id, name) =>
+        jwt.sign({ id, name }, process.env.SECRET_JWT, {
           expiresIn: "1d",
         });
 
