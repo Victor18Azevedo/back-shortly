@@ -44,7 +44,7 @@ export async function redirectShortUrl(req, res) {
       [shortUrl]
     );
 
-    if (!queryResult.rows[0]) {
+    if (queryResult.rowCount === 0) {
       console.log(
         chalk.magentaBright(
           dayjs().format("YYYY-MM-DD HH:mm:ss"),
