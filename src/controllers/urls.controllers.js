@@ -91,3 +91,32 @@ export async function urlShorten(req, res) {
     return res.sendStatus(500);
   }
 }
+
+export async function deleteUrl(req, res) {
+  const { id } = req.params;
+
+  try {
+    const queryResult = await connection.query(
+      `DELETE FROM urls WHERE "id" = $1`,
+      [id]
+    );
+
+    if (queryResult.rowCount !== 1) {
+      console.log(
+        chalk.redBright(
+          dayjs().format("YYYY-MM-DD HH:mm:ss"),
+          "- ERROR: delete url error"
+        )
+      );
+      res.sendStatus(500);
+      return;
+    }
+
+    res.sendStatus(204);
+  } catch (error) {
+    console.log(
+      chalk.redBright(dayjs().format("YYYY-MM-DD HH:mm:ss"), error.message)
+    );
+    return res.sendStatus(500);
+  }
+}
