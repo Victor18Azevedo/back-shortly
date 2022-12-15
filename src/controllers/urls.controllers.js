@@ -13,9 +13,7 @@ export async function getUrlById(req, res) {
       [id]
     );
 
-    const url = queryResult.rows[0];
-
-    if (!url) {
+    if (queryResult.rowCount === 0) {
       console.log(
         chalk.magentaBright(
           dayjs().format("YYYY-MM-DD HH:mm:ss"),
@@ -25,6 +23,8 @@ export async function getUrlById(req, res) {
       res.status(404).send("ID inválido");
       return;
     }
+
+    const url = queryResult.rows[0];
 
     res.send(url);
   } catch (error) {
