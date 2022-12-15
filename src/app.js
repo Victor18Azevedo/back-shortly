@@ -7,6 +7,7 @@ import chalk from "chalk";
 import usersRoutes from "./routes/usersRoutes.routes.js";
 import authRoutes from "./routes/authRoutes.routes.js";
 import urlsRoutes from "./routes/urlsRoutes.routes.js";
+import rankingRoutes from "./routes/rankingRoutes.routes.js";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(cors());
 app.use(authRoutes);
 app.use(usersRoutes);
 app.use(urlsRoutes);
+app.use(rankingRoutes);
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
