@@ -35,6 +35,43 @@ export async function getUrlById(req, res) {
   }
 }
 
+export async function redirectShortUrl(req, res) {
+  const { shortUrl } = req.params;
+
+  try {
+    const queryResult = await connection.query(
+      `SELECT "id", "url" FROM urls WHERE "shortUrl" = $1`,
+      [shortUrl]
+    );
+
+    if (!queryResult.rows[0]) {
+      console.log(
+        chalk.magentaBright(
+          dayjs().format("YYYY-MM-DD HH:mm:ss"),
+          "- BAD_REQUEST: shortUrl not exist"
+        )
+      );
+      res.status(404).send("shortUrl inválido");
+      return;
+    }
+
+    const { id, url } = queryResult.rows[0];
+
+    await connection.query(
+      `UPDATE urls SET "visitCount" = "visitCount" + 1
+      WHERE "id" = $1`,
+      [id]
+    );
+
+    res.redirect(url);
+  } catch (error) {
+    console.log(
+      chalk.redBright(dayjs().format("YYYY-MM-DD HH:mm:ss"), error.message)
+    );
+    return res.sendStatus(500);
+  }
+}
+
 export async function urlShorten(req, res) {
   const { id } = req.user;
   const { url } = req.body;
