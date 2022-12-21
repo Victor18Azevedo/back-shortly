@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 
-import connection from "../database/db.js";
+import { insertUser, selectUser } from "../repository/auth.repositories.js";
 
 export async function signUp(req, res) {
   const { name, email, password } = req.newUser;
@@ -12,11 +12,7 @@ export async function signUp(req, res) {
   try {
     const passwordHash = bcrypt.hashSync(password, 10);
 
-    await connection.query(
-      `INSERT INTO users ("name", "email", "password") VALUES ($1, $2, $3)`,
-      [name, email, passwordHash]
-    );
-
+    await insertUser(name, email, passwordHash);
     res.sendStatus(201);
     return;
   } catch (error) {
@@ -33,10 +29,7 @@ export async function signIn(req, res) {
   const { email, password } = req.user;
 
   try {
-    const queryResult = await connection.query(
-      `SELECT "id", "name", "password" FROM users WHERE "email" ILIKE $1`,
-      [email]
-    );
+    const queryResult = await selectUser(email);
     const user = queryResult.rows[0];
     if (!user) {
       console.log(
