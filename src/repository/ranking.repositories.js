@@ -7,6 +7,7 @@ export function selectUsersData() {
     SELECT urls."userId", SUM(urls."visitCount") AS "visitCount", COUNT(urls."userId") AS "linkCount"
     FROM urls
     GROUP BY urls."userId") uu
-  JOIN users ON users."id" = uu."userId"`
+  JOIN users ON users."id" = uu."userId"
+  LIMIT 10`
   );
 }
