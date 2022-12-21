@@ -1,19 +1,11 @@
 import chalk from "chalk";
 import dayjs from "dayjs";
 
-import connection from "../database/db.js";
+import { selectUsersData } from "../repository/ranking.repositories.js";
 
 export async function getRanking(req, res) {
   try {
-    const { rows } = await connection.query(
-      `SELECT users."id", users."name", uu."visitCount", uu."linkCount"
-      FROM (
-        SELECT urls."userId", SUM(urls."visitCount") AS "visitCount", COUNT(urls."userId") AS "linkCount"
-        FROM urls
-        GROUP BY urls."userId") uu
-      JOIN users ON users."id" = uu."userId"`
-    );
-
+    const { rows } = await selectUsersData();
     res.send(rows);
   } catch (error) {
     console.log(
