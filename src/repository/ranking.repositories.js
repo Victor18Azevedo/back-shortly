@@ -8,6 +8,7 @@ export function selectUsersData() {
     FROM urls
     GROUP BY urls."userId") uu
   JOIN users ON users."id" = uu."userId"
+  ORDER BY "visitCount" DESC
   LIMIT 10`
   );
 }
